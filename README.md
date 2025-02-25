@@ -1,37 +1,89 @@
-# Giro.Tech - Desafio Técnico Estagiário
+# Financial Data API
 
-Bem-vindo(a) ao **Desafio Técnico da Giro.Tech**! 🎉
+Esta é uma API RESTful para manipulação de dados financeiros, incluindo moedas, taxas de câmbio, investidores e investimentos.
 
-Nosso desafio técnico é composto por **duas áreas principais**, abrangendo **Backend e Frontend**. O objetivo é avaliar suas habilidades em **desenvolvimento, lógica de programação e manipulação de dados**.
+## Tecnologias Utilizadas
+- **Node.js**
+- **Express.js**
+- **MySQL**
+- **dotenv** (para variáveis de ambiente)
+- **Insomnia** (QA test da API)
 
----
+## Instalação
 
-## **1. Regras Gerais**
-- Você **deve** escolher e resolver apenas 1 dos desafios (Backend ou Frontend).
-- O envio **deve** ser feito através de um repositório público no **GitHub**.
-- Utilizar commits **organizados e descritivos**.
-- As linguagens/tecnologias permitidas para o desafio são:
-  - **Backend:** Java, Python, NodeJS e NextJs.
-  - **Frontend:** JavaScript/TypeScript, React, Angular e NextJs.
-- O projeto **deve** incluir um arquivo README.md com orientações claras de como executar e testar a aplicação.
----
+1. **Clone o repositório:**
+   ```sh
+   git clone <URL_DO_REPOSITORIO>
+   cd <NOME_DO_REPOSITORIO>
+   ```
 
-## **2. Estrutura do Desafio**
+2. **Instale as dependências:**
+   ```sh
+   npm install
+   ```
 
-🔗 [1. Acesse o desafio de Backend](desafio-back-end.md)  
-🔗 [2. Acesse o desafio de Frontend](desafio-front-end.md)  
+3. **Configure as variáveis de ambiente:**
+   - Renomeie o arquivo `.env.example` para `.env`
+   - Preencha os campos conforme seu ambiente:
+     ```env
+     MYSQL_HOST=localhost
+     MYSQL_USER=root
+     MYSQL_PASSWORD=root
+     MYSQL_DATABASE=financial_data
+     PORT=3333
+     ```
 
- 
+4. **Configure o banco de dados MySQL:**
+   - Crie o banco de dados `financial_data`
+   - Execute as migrações e população inicial, se necessário
 
----
+## Execução da API
 
-## **3. Critérios de Avaliação**
-- Clareza e organização do código.  
-- Uso adequado das tecnologias escolhidas. 
-- Implementação correta dos requisitos.  
-- Criatividade e eficiência na solução.
+Para iniciar o servidor, utilize o comando:
+```sh
+npm start
+```
+O servidor será iniciado na porta `3333` (ou conforme definido no `.env`).
 
----
+## Rotas Disponíveis
 
-**Boa sorte! Estamos ansiosos para ver seu código! 🚀**
+### 1. **Moedas**
+- `GET /currencies` - Retorna todas as moedas cadastradas.
+- `POST /currencies` - Cria uma nova moeda.
+  - **Body:** `{ "name": "Real", "type": "Fiat" }`
+
+### 2. **Taxas de Câmbio**
+- `GET /exchange-rates/recent` - Retorna as taxas de câmbio dos últimos 7 dias.
+- `POST /exchange-rates` - Cria uma nova taxa de câmbio.
+  - **Body:** `{ "date": "2024-02-24", "daily_variation": 0.02, "daily_rate": 5.1, "currency_id": 1 }`
+- `PUT /exchange-rates/:id` - Atualiza uma taxa de câmbio existente.
+- `DELETE /exchange-rates/old` - Exclui taxas de câmbio com mais de 30 dias.
+
+### 3. **Investidores**
+- `POST /investors` - Cria um novo investidor.
+  - **Body:** `{ "name": "João Silva", "email": "joao@email.com" }`
+- `DELETE /investors/:id` - Remove um investidor e seus investimentos.
+
+### 4. **Investimentos**
+- `POST /investments` - Cria um novo investimento.
+  - **Body:** `{ "initial_amount": 1000, "months": 12, "interest_rate": 0.05, "final_amount": 1600, "currency_id": 1, "investor_id": 2 }`
+- `GET /investments` - Retorna todos os investimentos cadastrados.
+
+## Testando a API
+
+Para testar as rotas, você pode utilizar o **Insomnia** ou **Postman**.
+
+Exemplo de teste via `cURL`:
+```sh
+curl -X GET http://localhost:3333/currencies
+```
+
+## Middleware de Erros
+Todos os erros inesperados são tratados pelo middleware `errorMiddleware`, garantindo respostas padronizadas com `500 Internal Server Error` quando necessário.
+
+## Contribuição
+Sinta-se à vontade para abrir **Issues** ou enviar **Pull Requests** para melhorias.
+
+## Licença
+Este projeto está sob a licença MIT.
 
